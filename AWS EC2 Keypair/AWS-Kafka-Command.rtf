@@ -1,0 +1,105 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2757
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 Times-Roman;\f2\fnil\fcharset0 Menlo-Bold;
+\f3\fnil\fcharset0 Menlo-Regular;\f4\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red200\green20\blue201;\red0\green0\blue0;\red232\green135\blue8;
+\red242\green239\blue236;\red135\green91\blue44;\red255\green255\blue255;\red85\green138\blue3;\red0\green0\blue0;
+\red210\green50\blue85;}
+{\*\expandedcolortbl;;\cssrgb\c83397\c23074\c82666;\csgray\c0;\cssrgb\c93333\c60000\c0;
+\cssrgb\c96078\c94902\c94118;\cssrgb\c60392\c43137\c22745;\cssrgb\c100000\c100000\c100000\c50196;\cssrgb\c40000\c60000\c0;\cssrgb\c0\c0\c0;
+\cssrgb\c86667\c29020\c40784;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww18220\viewh9920\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf0 To Connect to EC2 instance get the connection command for SSH client \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf0 \expnd0\expndtw0\kerning0
+ssh -i "kafka-stock-market-project.pem" ec2-user@ec2-54-144-121-45.compute-1.amazonaws.com
+\f0 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+To Install Kafka in EC2 instance\
+\
+wget https://downloads.apache.org/kafka/3.6.0/kafka_2.12-3.6.0.tgz\
+\
+tar -xvf kafka_2.12-3.6.0.tgz\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+To install Java as Kafka requires java\
+\
+sudo yum install 
+\f2\b\fs26 \cf2 \CocoaLigature0 java
+\f3\b0 \cf3 -11-amazon-corretto.x86_64
+\f0\fs28 \cf0 \CocoaLigature1 \
+\
+java -version\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+Start Zookeeper server\
+\
+bin/zookeeper-server-start.sh config/zookeeper.properties\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+Start Kafka Server\
+\
+to increase memory for kafka server use below command\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3 \cf3 \CocoaLigature0 export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"\
+\
+Right Now kafka is running in private IP so we cannot access it need to change it to public IP for\
+that need to modify the server.properties for kafka\
+\
+sudo nano config/server.properties\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0 \cf0 \CocoaLigature1 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+start Kafka with KRaft\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3 \cf3 \CocoaLigature0 export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+\f0 \cf0 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs30 \cf4 \cb5 \expnd0\expndtw0\kerning0
+\shad\shadx0\shady-20\shadr0\shado255 \shadc0 KAFKA_CLUSTER_ID\cf6 \cb7 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 =\cf8 \cb5 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 "\cf4 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 $(bin/kafka-storage.sh random-uuid)\cf8 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 "\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb5 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 bin/kafka-storage.sh \cf10 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 format\cf0 \shad\shadx0\shady-20\shadr0\shado255 \shadc0  -t \cf4 \cb5 \shad\shadx0\shady-20\shadr0\shado255 \shadc0 $KAFKA_CLUSTER_ID\cf0 \cb5 \shad\shadx0\shady-20\shadr0\shado255 \shadc0  -c config/kraft/server.properties\
+\
+bin/kafka-server-start.sh config/kraft/server.properties
+\f0\fs28 \cb1 \kerning1\expnd0\expndtw0 \shad0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3 \cf3 \CocoaLigature0 \
+Create new topics\
+\
+bin/kafka-topics.sh --create --topic demo_test --bootstrap-server 
+\f1 \cf0 \expnd0\expndtw0\kerning0
+\CocoaLigature1 34.224.8.77
+\f3 \cf3 \kerning1\expnd0\expndtw0 \CocoaLigature0 :9092 --replication-factor 1 --partitions 1\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0 \cf0 \CocoaLigature1 Console Consumer\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3 \cf3 \CocoaLigature0 bin/kafka-console-consumer.sh --bootstrap-server 34.224.8.77:9092 --topic demo_test\
+\
+Console Producer \
+\
+
+\f0 \cf0 \CocoaLigature1 \
+}
